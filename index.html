@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html ng-app="Translator" >
+  <head>
+  <style>
+h3{text-align: center;
+color:white;}
+body {
+    background-image: url("dna.jpg");
+    background-repeat: no-repeat;
+   background-color: black;
+
+}
+label{
+color:white;  
+}
+  </style>
+
+    <!--<link rel="stylesheet" type="text/css" href="bootstrap.min.css" />-->
+    <script type="text/javascript" src="angular.min.js"></script>
+    <script type="text/javascript" src="app.js"></script>
+
+  </head> 
+  <body class="container" ng-controller="dnatoaaController as translator">
+     <h3 >
+       <em class "pull-right" >{{"BioCode"}}
+        </em>      </h3>
+
+    <label>DNA Sequence:
+    <input ng-model="dnaSeq" type="text" name="input"  placeholder="DNA Sequence"
+            required ng-trim="false">
+  </label>
+   <label ng-show="done">Amino Acid Sequence:
+   
+        
+        <textarea ng-show="done">{{aaSeq}}</textarea>
+  
+  </label>
+
+
+    
+  
+      <button ng-click="genDNA()">DNA to Protein</button>
+     <!-- <button >Protein to DNA</button> -->
+
+
+    
+    <!-- ng-model="foo" is the same as doing $scope.foo; on the controller side -->
+    <!--<input ng-model="home"></input> -->
+ <!--<div ng-show="done">-->
+ 
+
+  
+    <!-- </div>-->
+    
+
+
+    <!-- bower:js
+    <script src="bower_components/angular/angular.js"></script>
+    endbower 
+
+    <script src="js/ang.js"></script>
+    <script src="js/ang.js"></script>-->
+  </body>
+
+
+
+
+
+</html>  
