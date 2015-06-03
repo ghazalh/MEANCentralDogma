@@ -3,10 +3,15 @@ var morgan=require ('morgan');
 var colors = require('colors');
 var bodyParser=require('body-parser');
 var cp= require ('child_process');
+var mongoose= require('mongoose');
 var app = express();
 var port=9001;
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+
+// === Connect to MongoDB ====
+
+mongoose.connect('mongodb://localhost/DNA');
 
 //====================CORS===================
 app.use(function(req, res, next) {
@@ -24,8 +29,28 @@ app.use(morgan(
     + 'sent in ' + ':response-time ms'.grey
 ));
 
+// ==== Schemas ====
+var DNASchema = mongoose.Schema({
+    'sequence': String,
+    'dnainput': String
+});
 
+// ==== Models ====
+var DNASeq = mongoose.model('DNA', DNASchema);
 
+/*var user1 = new DNASeq({
+	username: 'Bob',
+	password: 'sdsdsdsd'
+});
+
+user1.save(function(err, savedUser) {
+	if (err) {
+		console.log(err);
+	} else {
+		console.log(savedUser);
+	}
+});
+*/
 
 // POST /genDNA
 app.post('/genDNA', function(req, res){
@@ -58,11 +83,31 @@ myPython.stderr.on('data', function(data) {
 
 myPython.on('close', function(code) {
   results.exitcode= code;
+if (code === 0) {
+            // success, store sequence in DB
+            var seq = new DNASeq({
+                sequence: results.output,
+                dnainput: arg 
+            });
 
+            seq.save(function(err, sequence){
+                if (err) console.error(err);
+                
+                console.log('saved sequence');
+            });
+        }
   res.send(results);
 });
 })
 
+// GET /dnas
+app.get('/dnas', function(req, res) {
+    DNASeq.find(function(err, dnas){
+        if (err) console.error(err);
+        
+        res.send(dnas);
+    });
+});
 // ==== Listen ====
 app.listen(port);
 console.log('Express server listening on port ' + port.toString().blue);
@@ -71,6 +116,3 @@ console.log('Express server listening on port ' + port.toString().blue);
 // ==== Serve static content ====
 app.use(express.static('public'));
 console.log('Serving static content from ' + 'public'.rainbow);
-
-  
-
